@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Ayık Şoför</string>
+    <string name="title_activity_main">Ayık Şoför</string>
+    <string name="package_name">com.ayiksofor.app</string>
+    <string name="custom_url_scheme">com.ayiksofor.app</string>
+</resources>

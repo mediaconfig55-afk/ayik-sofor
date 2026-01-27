@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AYIK ŞOFÖR VIP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            overflow: hidden;
+            background-color: #050505;
+            color: #ffffff;
+        }
+        
+        /* VIP Gold Gradient - Using richer yellow-600/700 tones */
+        .text-gold {
+            background: linear-gradient(135deg, #ca8a04 0%, #eab308 50%, #ca8a04 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .bg-gold-gradient {
+            background: linear-gradient(135deg, #b45309 0%, #facc15 50%, #b45309 100%);
+        }
+        
+        /* Dynamic Glint Animation */
+        @keyframes glint {
+            0% { transform: translateX(-150%) skewX(-25deg); }
+            100% { transform: translateX(150%) skewX(-25deg); }
+        }
+        .glint-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        .glint-effect::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-150%) skewX(-25deg);
+            animation: glint 3s infinite;
+        }
+
+        /* Ambient Liquid Background */
+        .ambient-blob {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            opacity: 0.15;
+            animation: move 20s infinite alternate ease-in-out;
+        }
+        @keyframes move {
+            0% { transform: translate(-10%, -10%) scale(1); }
+            100% { transform: translate(20%, 30%) scale(1.2); }
+        }
+
+        /* Orbiting Dots */
+        @keyframes orbit {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .animate-orbit { animation: orbit 15s linear infinite; }
+        
+        /* Gold Pulse */
+        @keyframes pulse-gold-rich {
+            0% { box-shadow: 0 0 0 0 rgba(202, 138, 4, 0.4), 0 0 20px rgba(202, 138, 4, 0.2); }
+            70% { box-shadow: 0 0 0 40px rgba(202, 138, 4, 0), 0 0 60px rgba(202, 138, 4, 0.4); }
+            100% { box-shadow: 0 0 0 0 rgba(202, 138, 4, 0), 0 0 20px rgba(202, 138, 4, 0.1); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #eab308; border-radius: 10px; }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.38.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+    <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+{
+  "name": "Copy of AYIK ŞOFÖR",
+  "description": "Profesyonel vale ve güvenli şoför hizmeti uygulaması. Modern siyah ve sarı tema ile hızlı talep oluşturma.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
