@@ -1,5 +1,12 @@
 {
-  "version": "1.5", 
+  "version": "1.5.0",
   "url": "https://github.com/mediaconfig55-afk/ayik-sofor/releases/download/v1.5/app-debug.apk",
-  "notes": "Yeni özellikler eklendi. ✌"
+  "release_date": "2026-01-28",
+  "critical": false,
+  "notes": [
+    "🚀 Uygulama açılış hızı optimize edildi.",
+    "✨ Yeni 'Hızlı Çağrı' butonu eklendi.",
+    "🛠️ Konum belirleme hataları giderildi.",
+    "✌️ Ayık Şoför ile yolculuklar artık daha güvenli!"
+  ]
 }
