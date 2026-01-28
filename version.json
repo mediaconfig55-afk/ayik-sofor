@@ -1,5 +1,402 @@
-{
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Modal Görüntüleyici</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        h1 {
+            color: white;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .subtitle {
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+        
+        .json-display {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: left;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .json-display pre {
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            overflow-x: auto;
+        }
+        
+        .btn {
+            background: #FF6B6B;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+        
+        .btn:hover {
+            background: #FF5252;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.6);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        /* Modal Stilleri */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal {
+            background-color: white;
+            width: 90%;
+            max-width: 700px;
+            border-radius: 15px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            transform: translateY(50px);
+            transition: transform 0.5s ease;
+        }
+        
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+        
+        .modal-header {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .close-btn:hover {
+            transform: scale(1.1);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .modal-content {
+            padding: 30px;
+        }
+        
+        .json-item {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .json-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .json-key {
+            font-weight: 700;
+            color: #6a11cb;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .json-value {
+            padding-left: 20px;
+            font-size: 1rem;
+        }
+        
+        .json-value.version {
+            color: #2575fc;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+        
+        .json-value.url a {
+            color: #FF6B6B;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            background-color: rgba(255, 107, 107, 0.1);
+            border-radius: 8px;
+        }
+        
+        .json-value.url a:hover {
+            color: #FF5252;
+            background-color: rgba(255, 107, 107, 0.2);
+        }
+        
+        .json-value.notes {
+            color: #333;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #6a11cb;
+        }
+        
+        .modal-footer {
+            padding: 20px 30px;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: flex-end;
+            border-top: 1px solid #eee;
+        }
+        
+        .footer-note {
+            color: #666;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Responsive Tasarım */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .modal {
+                width: 95%;
+            }
+            
+            .modal-header {
+                padding: 15px 20px;
+            }
+            
+            .modal-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.7rem;
+            }
+            
+            .btn {
+                width: 100%;
+                padding: 15px 20px;
+            }
+            
+            .json-item {
+                margin-bottom: 20px;
+                padding-bottom: 15px;
+            }
+            
+            .json-key {
+                font-size: 1rem;
+            }
+            
+            .json-value {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JSON Modal Görüntüleyici</h1>
+        <p class="subtitle">Aşağıdaki JSON verisini güzel bir modal pencerede görüntüleyin</p>
+        
+        <div class="json-display">
+            <pre>{
   "version": "1.5", 
   "url": "https://github.com/mediaconfig55-afk/ayik-sofor/releases/latest",
   "notes": "Yeni özellikler eklendi."
-}
+}</pre>
+        </div>
+        
+        <button id="openModalBtn" class="btn">
+            <i class="fas fa-external-link-alt"></i> Modal'ı Aç
+        </button>
+    </div>
+    
+    <!-- Modal Pencere -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-code"></i> JSON Veri Detayları</h2>
+                <button class="close-btn" id="closeModalBtn">&times;</button>
+            </div>
+            
+            <div class="modal-content">
+                <div class="json-item">
+                    <div class="json-key"><i class="fas fa-tag"></i> Version</div>
+                    <div class="json-value version">1.5</div>
+                </div>
+                
+                <div class="json-item">
+                    <div class="json-key"><i class="fas fa-link"></i> URL</div>
+                    <div class="json-value url">
+                        <a href="https://github.com/mediaconfig55-afk/ayik-sofor/releases/latest" target="_blank">
+                            <i class="fab fa-github"></i> GitHub Releases Sayfası
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="json-item">
+                    <div class="json-key"><i class="fas fa-sticky-note"></i> Notes</div>
+                    <div class="json-value notes">Yeni özellikler eklendi.</div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <p class="footer-note">
+                    <i class="fas fa-info-circle"></i> Modalı kapatmak için ESC tuşuna basabilir veya dışarı tıklayabilirsiniz.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JSON verisi
+        const jsonData = {
+            "version": "1.5", 
+            "url": "https://github.com/mediaconfig55-afk/ayik-sofor/releases/latest",
+            "notes": "Yeni özellikler eklendi."
+        };
+        
+        // DOM elementlerini seçme
+        const openModalBtn = document.getElementById('openModalBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modal = document.querySelector('.modal');
+        
+        // Modal'ı açma fonksiyonu
+        function openModal() {
+            modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Sayfa kaydırmayı engelle
+        }
+        
+        // Modal'ı kapama fonksiyonu
+        function closeModal() {
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto'; // Sayfa kaydırmayı geri getir
+        }
+        
+        // Buton tıklama olayları
+        openModalBtn.addEventListener('click', openModal);
+        closeModalBtn.addEventListener('click', closeModal);
+        
+        // Overlay'e tıklayarak modal'ı kapatma
+        modalOverlay.addEventListener('click', function(e) {
+            if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+        
+        // ESC tuşu ile modal'ı kapatma
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                closeModal();
+            }
+        });
+        
+        // Sayfa yüklendiğinde modal'ı açma (demo için)
+        window.addEventListener('load', function() {
+            // Demo amacıyla 1 saniye sonra modal'ı otomatik aç
+            setTimeout(() => {
+                // Opsiyonel: Otomatik açmayı kapatmak için bu satırı yorum satırı yapın
+                // openModal();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
