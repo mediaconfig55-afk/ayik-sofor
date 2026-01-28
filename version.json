@@ -1,15 +1,15 @@
 {
-  "version": "2.0.2",
+  "version": "2.0.3",
   "url": "https://github.com/mediaconfig55-afk/ayik-sofor/releases/download/v2.0.2/app-debug.apk",
   "release_date": "2026-01-29",
   "critical": false,
   "notes": [
-    "🚀 PERFORMANS ARTIRILDI",
-    
+    "🚀 PERFORMANS ARTIRILDI", 
     "✨ Yeni özellikler eklendi.",
     "🛠️ Konum hataları giderildi.",
     "📱 Arayüz daha akıcı hale getirildi.",
-    
-    "✌️ Keyifli sürüşler dileriz!"
+    "✌️ Keyifli sürüşler dileriz!",
+           
+            "AYIK ŞOFÖR",
   ]
 }
