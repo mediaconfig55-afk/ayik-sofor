@@ -1,6 +1,6 @@
 {
   "version": "2.0.1",
-  "url": "https://github.com/mediaconfig55-afk/ayik-sofor/releases/download/app-debug.apk",
+  "url": "https://github.com/mediaconfig55-afk/ayik-sofor/releases/latest/download/app-debug.apk",
   "release_date": "2026-01-28",
   "critical": false,
   "notes": [
@@ -13,7 +13,3 @@
     "✌️ Keyifli sürüşler dileriz!"
   ]
 }
-
-
-
-
